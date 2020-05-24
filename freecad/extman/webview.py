@@ -31,6 +31,7 @@ from PySide2.QtWebEngineCore import (QWebEngineUrlRequestInfo,
                                      QWebEngineUrlSchemeHandler)
 from PySide2.QtWebEngineWidgets import QWebEngineSettings, QWebEngineView, QWebEnginePage
 from urllib.parse import unquote
+import platform
 
 from freecad.extman.worker import Worker
 
@@ -117,7 +118,10 @@ class SchemeHandler(QWebEngineUrlSchemeHandler):
             self.requestHandler(path, action, params, request, response)
 
         else:
-            filepath = path
+            if platform.system() == 'Windows':
+                filepath = 'C:'+path
+            else:
+                filepath = path
             if os.path.exists(filepath):
                 with open(filepath, 'rb') as f:
                     filepath = path.lower()
