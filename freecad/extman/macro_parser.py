@@ -64,19 +64,23 @@ def get_macro_tags(code, path):
 
 def build_macro_package(path, pfile, is_core=False, is_git=False, is_wiki=False, install_path=None, base_path=""):
     with open(path, 'r', encoding='utf-8') as f:
-        tags = get_macro_tags(f.read(), path)
-        install_dir = App.getUserMacroDir(True)
-        base = dict(
-            key=install_path or path,
-            type='Macro',
-            isCore=is_core,
-            installDir=install_dir,
-            installFile=os.path.join(install_dir, os.path.basename(path)),
-            isGit=is_git,
-            isWiki=is_wiki,
-            basePath=base_path
-        )
-        tags.update(base)
+        try:
+            tags = get_macro_tags(f.read(), path)
+            install_dir = App.getUserMacroDir(True)
+            base = dict(
+                key=install_path or path,
+                type='Macro',
+                isCore=is_core,
+                installDir=install_dir,
+                installFile=os.path.join(install_dir, os.path.basename(path)),
+                isGit=is_git,
+                isWiki=is_wiki,
+                basePath=base_path
+            )
+            tags.update(base)
+        except:
+            print('ExtMan - Must be an unwanted character in the macro '+path)
+            tags = []
 
         if not tags['title']:
             tags['title'] = tags['name'] or pfile
